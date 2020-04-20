@@ -2,6 +2,7 @@ import { Schemas } from 'ui/vis/editors/default/schemas';
 import { setup as visualizations } from '../../../src/legacy/core_plugins/visualizations/public/np_ready/public/legacy';
 import ReactComponent from './ReactComponent';
 import EditorComponent from './EditorComponent';
+import './style.css';
 
 
 visualizations.types.createReactVisualization(

@@ -14,7 +14,12 @@ import { npStart } from 'ui/new_platform';
 import { SearchSource } from '../../../src/legacy/ui/public/courier';
 export const indexPatternService = npStart.plugins.data.indexPatterns;
 
+import DataUtils from './utils/DataUtils';
+import Map from './Components/Map';
+
 export default class ReactComponent extends Component {
+  state = {}
+
   componentDidMount () {
     this.fetchData();
   }
@@ -31,28 +36,16 @@ export default class ReactComponent extends Component {
     searchSource.setField('source', false);
     searchSource.setField('query', {"query":"","language":"kuery","queryLastTriggeredAt":"2020-04-20T05:16:05.046Z"});
     searchSource.fetch().then(res => {
-      console.log('my res 1', res);
+      const chartData = DataUtils.convertToChartData(res);
+      this.setState({ chartData });
     });
   }
 
   render () {
-    const { visData } = this.props;
-    console.log('Component props > ', this.props);
+    const { chartData } = this.state;
+    // console.log('Component props > ', this.props);
     return (
-      <EuiPage>
-        <EuiPageBody>
-          <EuiPageContent>
-            <EuiPageContentHeader>
-              <EuiTitle>
-                <h2>Create React Visualisation Example</h2>
-              </EuiTitle>
-            </EuiPageContentHeader>
-            <EuiPageContentBody>
-              sdaf
-            </EuiPageContentBody>
-          </EuiPageContent>
-        </EuiPageBody>
-      </EuiPage>
+      <Map data={chartData}/>
     );
   }
 };
