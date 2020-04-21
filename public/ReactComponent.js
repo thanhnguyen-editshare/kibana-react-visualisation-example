@@ -22,30 +22,58 @@ export default class ReactComponent extends Component {
 
   componentDidMount () {
     this.fetchData();
+    this.setPrevProps();
+  }
+
+  componentDidUpdate () {
+    const { visParams } = this.props;
+    const { _indexId, _coordinateField, _valueField } = visParams;
+    if (this._indexId != _indexId ||
+      this._coordinateField != _coordinateField ||
+      this._valueField != _valueField
+    ) {
+      this.fetchData();
+    }
+    this.setPrevProps();
+  }
+
+  setPrevProps () {
+    const { visParams } = this.props;
+    const { _indexId, _coordinateField, _valueField } = visParams;
+    this._indexId = _indexId;
+    this._coordinateField = _coordinateField;
+    this._valueField = _valueField;
   }
 
   fetchData = async () => {
-    const { savedObjectsCache } = indexPatternService;
-    const indexPatternId = savedObjectsCache.find(obj => obj.attributes.title === 'veritas-entity-stats').id;
+    const { visParams } = this.props;
+    const { _indexId, _coordinateField, _valueField } = visParams;
 
-    const indexPattern = await indexPatternService.get(indexPatternId);
-    const searchSource = new SearchSource();
-    searchSource.setField('index', indexPattern);
-    searchSource.setField('size', 10000);
-    searchSource.setField('docvalue_fields', ["region.coordinate", 'entityType.keyword']);
-    searchSource.setField('source', false);
-    searchSource.setField('query', {"query":"","language":"kuery","queryLastTriggeredAt":"2020-04-20T05:16:05.046Z"});
-    searchSource.fetch().then(res => {
-      const chartData = DataUtils.convertToChartData(res);
-      this.setState({ chartData });
-    });
+    if (!_indexId || !_coordinateField || !_valueField) {
+      this.setState({ chartData: [] });
+    } else {
+      const indexPattern = await indexPatternService.get(_indexId);
+      const searchSource = new SearchSource();
+      searchSource.setField('index', indexPattern);
+      searchSource.setField('size', 10000);
+      searchSource.setField('docvalue_fields', [_coordinateField, _valueField]);
+      searchSource.setField('source', false);
+      searchSource.setField('query', {"query":"","language":"kuery","queryLastTriggeredAt":"2020-04-20T05:16:05.046Z"});
+      searchSource.fetch().then(res => {
+        const chartData = DataUtils.convertToChartData(res, _coordinateField, _valueField);
+        this.setState({ chartData });
+      });
+    }
+
   }
 
   render () {
     const { chartData } = this.state;
-    // console.log('Component props > ', this.props);
+    const { visParams } = this.props;
+    const { _pieSize } = visParams;
+    console.log('Component props > ', this.props);
     return (
-      <Map data={chartData}/>
+      <Map data={chartData} pieSize={_pieSize} />
     );
   }
 };

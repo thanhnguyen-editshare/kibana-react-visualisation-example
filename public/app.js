@@ -16,7 +16,7 @@ visualizations.types.createReactVisualization(
     },
     requestHandler: 'none',
     editorConfig: {
-      // optionsTemplate: EditorComponent
+      optionsTemplate: EditorComponent
     }
   }
 );

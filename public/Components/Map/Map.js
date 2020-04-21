@@ -62,13 +62,18 @@ export default class Map extends Component {
   }
 
   renderCountries () {
-    this.mapContainer.selectAll("path.map-path")
+    const mapPathSelection = this.mapContainer.selectAll("path.map-path")
       .data(topojson.object(topology, topology.objects.countries).geometries)
-      .enter()
+
+    mapPathSelection.enter()
         .append("path")
         .classed('map-path', true)
-        .attr("d", this.path)
-        .style("fill","black")
+
+    mapPathSelection.exit().remove();
+
+    this.mapContainer.selectAll("path.map-path")
+      .attr("d", this.path)
+      .style("fill","black")
 
     var zoom = d3.behavior.zoom()
       .on("zoom", () => {
@@ -80,7 +85,7 @@ export default class Map extends Component {
   }
 
   renderMarkers () {
-    const { data = [] } = this.props;
+    const { data = [], pieSize } = this.props;
 
     const tip = d3tip().attr('class', 'd3-tip')
       .offset([-10, 0])
@@ -93,11 +98,16 @@ export default class Map extends Component {
 
     this.svg.call(tip);
 
-    const markerContainers = this.markerContainer.selectAll('g.marker-container')
+    const markerContainersSelection = this.markerContainer.selectAll('g.marker-container')
       .data(data)
-      .enter()
+
+    markerContainersSelection.enter()
       .append('g')
       .classed('marker-container', true)
+
+    markerContainersSelection.exit().remove();
+
+    this.markerContainer.selectAll('g.marker-container')
       .attr("transform", (d) => {
         const coordinates = _.cloneDeep(d.coordinates).reverse();
         const x = this.projection(coordinates)[0],
@@ -118,20 +128,27 @@ export default class Map extends Component {
 
     const pie = d3.layout.pie()
       .value(function(d) {return d.value.value; });
-    const width = 40, height = 40;
-    var radius = Math.min(width, height) / 2
+
+    const width = parseInt(pieSize), height = parseInt(pieSize);
+    const radius = Math.min(width, height) / 2
 
     const color = d3.scale.ordinal()
         .domain(pieKeys)
         .range(["rgb(29, 92, 171)", "rgb(216, 61, 53)", "rgb(201, 173, 49)", "rgb(65, 147, 124)"])
 
-    markerContainers.selectAll('path.pie-path')
+    const piePathSelection = this.markerContainer.selectAll('g.marker-container').selectAll('path.pie-path')
       .data(d => {
         var data_ready = pie(d3.entries(d.data))
         return data_ready
       })
-      .enter()
+
+    piePathSelection.enter()
       .append('path')
+      .classed('pie-path', true);
+
+    piePathSelection.exit().remove();
+
+    this.markerContainer.selectAll('g.marker-container').selectAll('path.pie-path')
       .attr('d', d3.svg.arc()
         .innerRadius(0)
         .outerRadius(radius)
@@ -157,4 +174,8 @@ export default class Map extends Component {
       </svg>
     );
   }
+}
+
+Map.defaultProps = {
+  pieSize: 40
 }
