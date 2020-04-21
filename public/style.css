@@ -1,5 +1,11 @@
-path {
+path.marker {
   stroke: white;
   stroke-width: 0.25px;
   fill: grey;
+}
+
+path.map-path {
+  stroke: white;
+  stroke-width: 0.25px;
+  fill: lightgray !important;
 }
