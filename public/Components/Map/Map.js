@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import d3 from 'd3';
+import d3tip from 'd3-tip';
 import topology from './topology';
 import './topojson';
 
@@ -53,13 +54,11 @@ export default class Map extends Component {
     this.projection = d3.geo.mercator()
       .scale(130)
       .translate( [this.svgEl.clientWidth / 2, this.svgEl.clientHeight / 1.5]);
-    console.log('projection', this.projection);
   }
 
   createPath () {
     this.path = d3.geo.path()
       .projection(this.projection);
-    console.log('createpath', this.path);
   }
 
   renderCountries () {
@@ -82,7 +81,17 @@ export default class Map extends Component {
 
   renderMarkers () {
     const { data = [] } = this.props;
-    console.log('addMarkers', data);
+
+    const tip = d3tip().attr('class', 'd3-tip')
+      .offset([-10, 0])
+      .html((d) => {
+        const rows = _.map(d.data, item => {
+          return `<tr><td>${item.type}</td><td>${item.value}</td></tr>`
+        })
+        return `<table>${rows.join('')}</table>`;
+      });
+
+    this.svg.call(tip);
 
     const markerContainers = this.markerContainer.selectAll('g.marker-container')
       .data(data)
@@ -94,7 +103,10 @@ export default class Map extends Component {
         const x = this.projection(coordinates)[0],
           y = this.projection(coordinates)[1];
         return "translate(" + x + "," + y + ") scale(1)"
-      });
+      })
+      .on('mouseover', tip.show)
+      .on("mousemove", tip.show)
+      .on('mouseout', tip.hide);
 
     let pieKeys = [];
     _.each(data, d => {
@@ -103,7 +115,6 @@ export default class Map extends Component {
       });
     });
     pieKeys = _.uniq(pieKeys);
-    console.log('pieKeys', pieKeys);
 
     const pie = d3.layout.pie()
       .value(function(d) {return d.value.value; });

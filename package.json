@@ -8,5 +8,8 @@
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/satishwaghela/kibana-react-visualisation-example"
+	},
+	"dependencies": {
+		"d3-tip": "^0.9.1"
 	}
 }
