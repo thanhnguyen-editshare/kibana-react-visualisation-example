@@ -1,3 +1,7 @@
+svg.map {
+  background: skyblue;
+}
+
 path.marker {
   stroke: white;
   stroke-width: 0.25px;
@@ -5,9 +9,9 @@ path.marker {
 }
 
 path.map-path {
-  stroke: white;
+  stroke: grey;
   stroke-width: 0.25px;
-  fill: lightgray !important;
+  fill: #f8f4f0 !important;
 }
 
 .d3-tip {

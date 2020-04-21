@@ -123,7 +123,7 @@ export default class Map extends Component {
 
     const color = d3.scale.ordinal()
         .domain(pieKeys)
-        .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56"])
+        .range(["rgb(29, 92, 171)", "rgb(216, 61, 53)", "rgb(201, 173, 49)", "rgb(65, 147, 124)"])
 
     markerContainers.selectAll('path.pie-path')
       .data(d => {
@@ -149,7 +149,7 @@ export default class Map extends Component {
   render () {
     const { data } = this.props;
     return (
-      <svg ref={ref => this.svgEl = ref} width='100%' height='100%'>
+      <svg ref={ref => this.svgEl = ref} width='100%' height='100%' className='map'>
         <g ref={ref => this.containerEl = ref}>
           <g ref={ref => this.mapContainerEl = ref}></g>
           <g ref={ref => this.markerContainerEl = ref}></g>
