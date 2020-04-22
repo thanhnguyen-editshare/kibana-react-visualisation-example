@@ -51,6 +51,8 @@ path.map-path {
   position: absolute;
   right: 0;
   background: #ffffff96;
+  max-height: 100px;
+  overflow: auto;
 }
 
 .legend-item {

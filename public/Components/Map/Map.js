@@ -131,7 +131,9 @@ export default class Map extends Component {
   initMarkerColor () {
     this.color = d3.scale.ordinal()
       .domain(this.getDataKeys())
-      .range(["rgb(29, 92, 171)", "rgb(216, 61, 53)", "rgb(201, 173, 49)", "rgb(65, 147, 124)"])
+      .range(["rgb(29, 92, 171)", "rgb(216, 61, 53)", "rgb(201, 173, 49)", "rgb(65, 147, 124)",
+        "#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c", "#98df8a", "#d62728", "#ff9896", "#9467bd", "#c5b0d5", "#8c564b", "#c49c94", "#e377c2", "#f7b6d2", "#7f7f7f", "#c7c7c7", "#bcbd22", "#dbdb8d", "#17becf", "#9edae5"
+      ])
   }
 
   getDataKeys () {
@@ -155,19 +157,32 @@ export default class Map extends Component {
 
     selection.exit().remove();
 
-    newLi
-      .append('span')
-      .classed('legend-rect', true)
+    const legendRectSelection = d3.select(this.legendContainerEl).selectAll('li.legend-item').selectAll('span.legend-rect')
+      .data(d => [d]);
 
-    newLi
+    legendRectSelection.enter()
+      .append('span')
+      .classed('legend-rect', true);
+
+    legendRectSelection.exit().remove();
+
+    const legendTextSelection = d3.select(this.legendContainerEl).selectAll('li.legend-item').selectAll('span.legend-text')
+      .data(d => [d]);
+
+    legendTextSelection.enter()
       .append('span')
       .classed('legend-text', true)
       .text((d) => d);
 
+    legendTextSelection.exit().remove();
+
     d3.select(this.legendContainerEl).selectAll('li.legend-item .legend-rect')
       .style({
         background: (d) => this.color(d)
-      })
+      });
+
+    d3.select(this.legendContainerEl).selectAll('li.legend-item .legend-text')
+      .text((d) => d);
   }
 
   render () {

@@ -7,7 +7,14 @@ DataUtils.convertToChartData = (esResponse, coordinateField, valueField) => {
   const groupedByLatLong = _.groupBy(hits, (doc) => doc.fields[coordinateField]);
   const chartData = []
   _.each(groupedByLatLong, (resources, key) => {
-    const groupedByEntityType = _.groupBy(resources, (doc) => doc.fields[valueField][0])
+    const groupedByEntityType = _.groupBy(resources, (doc) => {
+      const value = doc.fields[valueField];
+      if (value && value.length) {
+        return value[0];
+      } else {
+        return '';
+      }
+    })
     const locData = [];
     _.each(groupedByEntityType, (res, resourceType) => {
       locData.push({
