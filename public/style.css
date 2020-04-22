@@ -46,3 +46,22 @@ path.map-path {
 .d3-tip table td {
   padding: 2px 5px;
 }
+
+.map-legend {
+  position: absolute;
+  right: 0;
+  background: #ffffff96;
+}
+
+.legend-item {
+  font-size: 12px;
+  margin: 5px;
+}
+
+.legend-rect {
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  display: inline-block;
+  margin-right: 5px;
+}

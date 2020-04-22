@@ -1,14 +1,4 @@
 import React, { Component } from 'react';
-import {
-  EuiPage,
-  EuiPageHeader,
-  EuiTitle,
-  EuiPageBody,
-  EuiPageContent,
-  EuiPageContentHeader,
-  EuiPageContentBody,
-  EuiText
-} from '@elastic/eui';
 
 import { npStart } from 'ui/new_platform';
 import { SearchSource } from '../../../src/legacy/ui/public/courier';
@@ -71,7 +61,6 @@ export default class ReactComponent extends Component {
     const { chartData } = this.state;
     const { visParams } = this.props;
     const { _pieSize } = visParams;
-    console.log('Component props > ', this.props);
     return (
       <Map data={chartData} pieSize={_pieSize} />
     );

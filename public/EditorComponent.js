@@ -1,21 +1,15 @@
 import React, { Component } from 'react';
 import {
   EuiPage,
-  EuiPageHeader,
-  EuiTitle,
   EuiPageBody,
   EuiPageContent,
-  EuiPageContentHeader,
   EuiPageContentBody,
-  EuiText,
   EuiFormRow,
   EuiComboBox,
-  EuiFieldText,
   EuiFieldNumber
 } from '@elastic/eui';
 
 import { npStart } from 'ui/new_platform';
-import { SearchSource } from '../../../src/legacy/ui/public/courier';
 export const indexPatternService = npStart.plugins.data.indexPatterns;
 
 export default class Editor extends Component {
@@ -60,7 +54,6 @@ export default class Editor extends Component {
 
   fetchIndex = async (indexId) => {
     const indexPattern = await indexPatternService.get(indexId);
-    console.log('indexPattern', indexPattern);
     this.setState({ indexPattern });
   }
 
@@ -76,10 +69,8 @@ export default class Editor extends Component {
   }
 
   render () {
-    const { indexPattern = {} } = this.state;
     const { stateParams } = this.props;
     const { savedObjectsCache } = indexPatternService;
-    console.log('Editor props', this.props, savedObjectsCache);
     const options = _.map(savedObjectsCache, obj => {
       return {
         label: obj.attributes.title,
@@ -136,7 +127,7 @@ export default class Editor extends Component {
               )}
               <EuiFormRow>
                 <div>
-                  <label class="euiFormLabel euiFormRow__label">Pie Box Size</label>
+                  <label className="euiFormLabel euiFormRow__label">Pie Box Size</label>
                   <EuiFieldNumber value={stateParams._pieSize} onChange={(e) => {
                     this.props.setValue('_pieSize', e.currentTarget.value);
                   }}/>
