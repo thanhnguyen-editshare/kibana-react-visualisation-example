@@ -1,7 +1,7 @@
 {
 	"name": "kibana-react-visualisation-example",
 	"description": "Kibana create react visualisation example",
-	"version": "6.8.8",
+	"version": "7.7.0",
 	"homepage": "https://satishwaghela.github.io/",
 	"license": "Apache-2.0",
 	"author": "Satish Waghela <satishmwaghela@gmail.com>",
